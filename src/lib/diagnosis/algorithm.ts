@@ -38,39 +38,39 @@ const CAREER_TYPE_PROFILES: Record<CareerTypeId, DimensionScores> = {
   socialWorker:  { RT:35, AT:60, LP:60, ID:60, SI:90, TA:40, SP:65, AM:70, CT:50, PE:80 },
 }
 
-// Base median income (万円/年) for each career type
+// Base median income (万円/年) — realistic Japanese market medians (not best-case)
 const BASE_MEDIAN_INCOME: Record<CareerTypeId, number> = {
-  entrepreneur:  3500,
-  executive:     1800,
-  specialist:    900,
-  sales:         700,
-  researcher:    800,
-  creator:       500,
-  engineer:      750,
-  consultant:    1200,
-  finance:       1000,
-  medical:       1200,
-  publicServant: 550,
-  craftsman:     450,
-  educator:      500,
-  marketer:      650,
-  producer:      800,
-  nurse:         600,
-  webDesigner:   550,
-  hrSpecialist:  600,
-  lawyer:        1000,
-  projectManager:850,
-  writer:        450,
-  counselor:     450,
-  chef:          400,
-  beautician:    350,
-  socialWorker:  380,
+  entrepreneur:  700,
+  executive:     950,
+  specialist:    650,
+  sales:         520,
+  researcher:    620,
+  creator:       360,
+  engineer:      530,
+  consultant:    680,
+  finance:       720,
+  medical:       1050,
+  publicServant: 500,
+  craftsman:     360,
+  educator:      460,
+  marketer:      500,
+  producer:      560,
+  nurse:         470,
+  webDesigner:   400,
+  hrSpecialist:  480,
+  lawyer:        680,
+  projectManager:620,
+  writer:        340,
+  counselor:     360,
+  chef:          310,
+  beautician:    290,
+  socialWorker:  320,
 }
 
-// Dimension weights for matching (higher = more discriminating)
+// Dimension weights for matching — TA/SI/CT boosted now that Q31-35 measure them properly
 const MATCH_WEIGHTS: Record<Dimension, number> = {
-  RT: 1.2, AT: 1.3, LP: 1.1, ID: 1.0, SI: 1.0,
-  TA: 1.0, SP: 0.9, AM: 1.4, CT: 1.0, PE: 1.2,
+  RT: 1.2, AT: 1.1, LP: 1.1, ID: 1.0, SI: 1.2,
+  TA: 1.3, SP: 1.0, AM: 1.3, CT: 1.1, PE: 1.1,
 }
 
 const DIMS: Dimension[] = ['RT', 'AT', 'LP', 'ID', 'SI', 'TA', 'SP', 'AM', 'CT', 'PE']
@@ -94,12 +94,31 @@ function weightedCosineSimilarity(userScores: DimensionScores, profile: Dimensio
   return clamp((dot / mag) * 100, 0, 100)
 }
 
+// Euclidean similarity: penalises absolute mismatches that cosine similarity ignores
+function weightedEuclideanSimilarity(userScores: DimensionScores, profile: DimensionScores): number {
+  let sumSqDiff = 0
+  let totalWeight = 0
+
+  for (const dim of DIMS) {
+    const w = MATCH_WEIGHTS[dim]
+    const diff = ((userScores[dim] ?? 0) - (profile[dim] ?? 0)) / 100
+    sumSqDiff += w * diff * diff
+    totalWeight += w
+  }
+
+  const normalizedDist = Math.sqrt(sumSqDiff / totalWeight)
+  return clamp((1 - normalizedDist) * 100, 0, 100)
+}
+
 function matchCareerTypes(userScores: DimensionScores): CareerTypeMatch[] {
   const matches: { id: CareerTypeId; score: number }[] = []
 
   for (const [typeId, profile] of Object.entries(CAREER_TYPE_PROFILES) as [CareerTypeId, DimensionScores][]) {
-    const score = weightedCosineSimilarity(userScores, profile)
-    matches.push({ id: typeId, score: Math.round(score) })
+    const cos = weightedCosineSimilarity(userScores, profile)
+    const euc = weightedEuclideanSimilarity(userScores, profile)
+    // Blend: euclidean dominates (0.65) to create clear separation; cosine keeps direction
+    const score = Math.round(cos * 0.35 + euc * 0.65)
+    matches.push({ id: typeId, score })
   }
 
   return matches
@@ -109,12 +128,13 @@ function matchCareerTypes(userScores: DimensionScores): CareerTypeMatch[] {
 
 function calcPerformanceMultiplier(scores: DimensionScores): number {
   return (
-    scores.AT * 0.20 +
-    scores.AM * 0.25 +
+    scores.AT * 0.18 +
+    scores.AM * 0.22 +
     scores.PE * 0.15 +
-    scores.LP * 0.15 +
+    scores.LP * 0.12 +
     scores.RT * 0.10 +
-    scores.ID * 0.15
+    scores.ID * 0.12 +
+    scores.TA * 0.11
   ) / 100
 }
 
@@ -125,8 +145,9 @@ function estimateIncome(
   const baseMedian = BASE_MEDIAN_INCOME[topType]
   const perf = calcPerformanceMultiplier(scores)
 
-  // Income = base × (0.60 + perf × 0.80) → range: 0.60x ~ 1.40x
-  const currentMedian = Math.round(baseMedian * (0.60 + perf * 0.80))
+  // Income = base × (0.55 + perf × 0.60) → range: 0.55x ~ 1.15x
+  // Average performer (perf≈0.5) → ×0.85、top performer (perf≈1.0) → ×1.15
+  const currentMedian = Math.round(baseMedian * (0.55 + perf * 0.60))
 
   const growthComposite = (
     scores.AM * 0.30 +
@@ -136,7 +157,7 @@ function estimateIncome(
     scores.LP * 0.10
   ) / 100
 
-  const annualGrowthRate = 0.03 + growthComposite * 0.08 // 3% ~ 11%/year
+  const annualGrowthRate = 0.02 + growthComposite * 0.05 // 2% ~ 7%/year
 
   const year5 = Math.round(currentMedian * Math.pow(1 + annualGrowthRate, 5))
   const year10 = Math.round(currentMedian * Math.pow(1 + annualGrowthRate, 10))

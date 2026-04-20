@@ -400,6 +400,73 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['SI', 'RT', 'AM', 'LP'],
   },
+
+  // ─── Section F: 適性・得意分野 ────────────────────────────────────
+  {
+    id: 31,
+    section: 'F',
+    sectionLabel: '適性・得意分野',
+    question: '学校の授業や勉強で、最も得意・好きだったのはどの分野ですか？',
+    options: [
+      { id: 'A', text: '数学・物理・情報技術など理系・論理系の科目', scores: { TA: 3, AT: 2 } },
+      { id: 'B', text: '国語・英語・文学など言語・表現系の科目', scores: { CT: 3, PE: 1 } },
+      { id: 'C', text: '美術・音楽・デザインなど感性・創作系の科目', scores: { CT: 4, ID: 3 } },
+      { id: 'D', text: '社会・歴史・倫理など人文・社会系の科目', scores: { SI: 2, LP: 1, AT: 1 } },
+    ],
+    measureTypes: ['TA', 'CT', 'SI', 'ID'],
+  },
+  {
+    id: 32,
+    section: 'F',
+    sectionLabel: '適性・得意分野',
+    question: '給与が同じだとしたら、どんな仕事が一番楽しそうですか？',
+    options: [
+      { id: 'A', text: '専門技術・医療・エンジニアリングなど、技術で問題を解く仕事', scores: { TA: 4, AT: 1 } },
+      { id: 'B', text: '芸術・デザイン・ライティングなど、表現・創作の仕事', scores: { CT: 4, ID: 3 } },
+      { id: 'C', text: 'カウンセリング・教育・福祉など、人を直接サポートする仕事', scores: { SI: 4, PE: 2 } },
+      { id: 'D', text: '経営・投資・コンサルなど、戦略・意思決定に関わる仕事', scores: { AM: 3, LP: 2, AT: 1 } },
+    ],
+    measureTypes: ['TA', 'CT', 'SI', 'AM'],
+  },
+  {
+    id: 33,
+    section: 'F',
+    sectionLabel: '適性・得意分野',
+    question: '周りの人から「自然にそうなってる」「向いてる」とよく言われることに最も近いのは？',
+    options: [
+      { id: 'A', text: '「技術的なことは任せた」「細かくて正確」「専門的すぎてついていけない」', scores: { TA: 4, PE: 3 } },
+      { id: 'B', text: '「話すと楽になる」「人の気持ちをわかってる」「気遣いがすごい」', scores: { SI: 5, PE: 2 } },
+      { id: 'C', text: '「発想がユニーク」「センスがいい」「面白いアイデアを出す」', scores: { CT: 4, ID: 3 } },
+      { id: 'D', text: '「論理的でわかりやすい」「計画・数字に強い」「判断が的確」', scores: { AT: 2, LP: 2, AM: 2 } },
+    ],
+    measureTypes: ['TA', 'SI', 'CT', 'AT'],
+  },
+  {
+    id: 34,
+    section: 'F',
+    sectionLabel: '適性・得意分野',
+    question: '仕事の「理想の成果・手応え」として最もイメージに近いのはどれですか？',
+    options: [
+      { id: 'A', text: '自分が作ったシステム・製品・技術が、実際に動いて使われている', scores: { TA: 4, AT: 2 } },
+      { id: 'B', text: '「あなたのおかげで助かった・良くなった」という言葉を直接もらうこと', scores: { SI: 5, PE: 2 } },
+      { id: 'C', text: '自分の作品・デザイン・コンテンツが広まり、多くの人の目に触れること', scores: { CT: 4, ID: 3 } },
+      { id: 'D', text: '自分が関わったプロジェクト・事業が大きな数字・成果を出したこと', scores: { AM: 4, LP: 2, AT: 1 } },
+    ],
+    measureTypes: ['TA', 'SI', 'CT', 'AM'],
+  },
+  {
+    id: 35,
+    section: 'F',
+    sectionLabel: '適性・得意分野',
+    question: '今後のキャリアで「絶対に向いていない・したくない仕事」に最も近いのはどれですか？',
+    options: [
+      { id: 'A', text: '高度な技術・専門知識が求められる細かい専門職・技術職', scores: { TA: -3 } },
+      { id: 'B', text: '人の深い悩みや感情に長時間向き合い続ける対人支援の仕事', scores: { SI: -3, SP: 1 } },
+      { id: 'C', text: '感性やオリジナリティで評価されるクリエイティブ・表現系の仕事', scores: { CT: -3, SP: 1 } },
+      { id: 'D', text: '毎日同じ業務を繰り返す安定・定型型の仕事', scores: { SP: -3, ID: 2, RT: 1 } },
+    ],
+    measureTypes: ['TA', 'SI', 'CT', 'SP'],
+  },
 ]
 
 export const TOTAL_QUESTIONS = QUESTIONS.length
@@ -410,4 +477,5 @@ export const SECTIONS = [
   { id: 'C', label: 'あなたの考え方', range: [13, 18] },
   { id: 'D', label: '性格特性', range: [19, 24] },
   { id: 'E', label: '行動履歴・キャリア志向', range: [25, 30] },
+  { id: 'F', label: '適性・得意分野', range: [31, 35] },
 ]

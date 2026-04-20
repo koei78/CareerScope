@@ -1,19 +1,20 @@
 import type { Dimension, DimensionScores, DiagnosisAnswers } from '@/types/diagnosis'
-import { QUESTIONS } from './questions'
+import { QUESTIONS, TOTAL_QUESTIONS } from './questions'
 import { clamp } from '@/lib/utils'
 
 // Maximum theoretical raw score per dimension (used for normalization)
+// Updated to account for Section F questions (Q31-Q35) which add TA/SI/CT coverage
 const MAX_RAW_SCORES: Record<Dimension, number> = {
-  RT: 20,
-  AT: 30,
-  LP: 20,
-  ID: 15,
-  SI: 15,
-  TA: 10,
+  RT: 21,
+  AT: 37,
+  LP: 27,
+  ID: 27,
+  SI: 31,
+  TA: 25,
   SP: 15,
-  AM: 25,
-  CT: 12,
-  PE: 20,
+  AM: 34,
+  CT: 28,
+  PE: 27,
 }
 
 export function calculateRawScores(answers: DiagnosisAnswers): Record<Dimension, number> {
@@ -52,7 +53,7 @@ export function normalizeScores(raw: Record<Dimension, number>): DimensionScores
 
 export function calculateReliabilityScore(answers: DiagnosisAnswers): number {
   const answeredCount = Object.keys(answers).length
-  const completionRate = answeredCount / 30
+  const completionRate = answeredCount / TOTAL_QUESTIONS
 
   // Check for internal consistency
   // High RT but all SP answers would be inconsistent

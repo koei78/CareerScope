@@ -5,7 +5,7 @@ import DiagnosisStartButton from '@/components/diagnosis/DiagnosisStartButton'
 
 export const metadata: Metadata = {
   title: '診断スタート',
-  description: '30問・約10分で職業適性・推定年収・キャリア成長速度を科学的に診断します。',
+  description: '35問・約15分で職業適性・推定年収・キャリア成長速度を科学的に診断します。',
 }
 
 const ANALYSIS_ITEMS = [
@@ -23,7 +23,7 @@ export default function DiagnosisStartPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-[#1e3a5f]/5 rounded-full px-4 py-1.5 mb-6">
             <Clock className="w-4 h-4 text-[#1e3a5f]" />
-            <span className="text-[#1e3a5f] text-sm font-semibold">所要時間：約10分 / 全30問</span>
+            <span className="text-[#1e3a5f] text-sm font-semibold">所要時間：約15分 / 全35問</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[#0f172a] leading-tight mb-4">
             キャリア適性診断を
