@@ -194,7 +194,7 @@ export function rankCareersForUser(scores: DimensionScores): CareerRankItem[] {
   return CAREERS.map(career => {
     // Simple scoring based on career category alignment
     const aptitudeScore = calcAptitudeScore(career, scores)
-    const successProbability = Math.round(aptitudeScore * 0.9 + Math.random() * 5)
+    const successProbability = Math.round(aptitudeScore * 0.9)
     const incomeMultiplier = (
       scores.AM * 0.25 + scores.PE * 0.20 + scores.AT * 0.15 +
       scores.LP * 0.15 + scores.RT * 0.10 + scores.ID * 0.15
