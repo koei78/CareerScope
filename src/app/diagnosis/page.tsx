@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Clock, Shield, BarChart3, Brain, TrendingUp } from 'lucide-react'
+import { Clock, Shield, BarChart3, Brain, TrendingUp } from 'lucide-react'
+import DiagnosisStartButton from '@/components/diagnosis/DiagnosisStartButton'
 
 export const metadata: Metadata = {
   title: '診断スタート',
@@ -91,13 +92,7 @@ export default function DiagnosisStartPage() {
 
         {/* CTA */}
         <div className="text-center">
-          <Link
-            href="/diagnosis/questions"
-            className="inline-flex items-center gap-3 px-10 py-5 bg-[#1e3a5f] text-white font-bold text-xl rounded-xl hover:bg-[#162d4a] active:scale-[0.98] transition-all duration-200 shadow-lg"
-          >
-            診断スタート
-            <ArrowRight className="w-6 h-6" />
-          </Link>
+          <DiagnosisStartButton />
           <p className="text-[#94a3b8] text-sm mt-3">登録なし・無料・ブラウザに保存されません</p>
         </div>
       </div>
