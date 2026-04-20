@@ -26,6 +26,16 @@ const CAREER_TYPE_PROFILES: Record<CareerTypeId, DimensionScores> = {
   educator:      { RT:35, AT:75, LP:65, ID:60, SI:90, TA:55, SP:65, AM:70, CT:65, PE:80 },
   marketer:      { RT:65, AT:80, LP:65, ID:80, SI:75, TA:65, SP:40, AM:80, CT:85, PE:70 },
   producer:      { RT:70, AT:75, LP:80, ID:85, SI:85, TA:55, SP:35, AM:85, CT:80, PE:75 },
+  nurse:         { RT:30, AT:70, LP:55, ID:45, SI:90, TA:85, SP:75, AM:70, CT:40, PE:90 },
+  webDesigner:   { RT:50, AT:65, LP:40, ID:80, SI:60, TA:85, SP:45, AM:65, CT:90, PE:75 },
+  hrSpecialist:  { RT:40, AT:70, LP:70, ID:55, SI:85, TA:45, SP:60, AM:70, CT:50, PE:75 },
+  lawyer:        { RT:45, AT:90, LP:65, ID:50, SI:70, TA:60, SP:65, AM:80, CT:45, PE:90 },
+  projectManager:{ RT:60, AT:80, LP:85, ID:65, SI:75, TA:60, SP:55, AM:80, CT:55, PE:80 },
+  writer:        { RT:45, AT:70, LP:40, ID:70, SI:65, TA:50, SP:50, AM:65, CT:90, PE:80 },
+  counselor:     { RT:30, AT:65, LP:55, ID:50, SI:95, TA:50, SP:70, AM:65, CT:55, PE:85 },
+  chef:          { RT:50, AT:55, LP:60, ID:75, SI:70, TA:85, SP:55, AM:75, CT:80, PE:90 },
+  beautician:    { RT:45, AT:45, LP:55, ID:65, SI:85, TA:75, SP:55, AM:65, CT:80, PE:85 },
+  socialWorker:  { RT:35, AT:60, LP:60, ID:60, SI:90, TA:40, SP:65, AM:70, CT:50, PE:80 },
 }
 
 // Base median income (万円/年) for each career type
@@ -45,6 +55,16 @@ const BASE_MEDIAN_INCOME: Record<CareerTypeId, number> = {
   educator:      500,
   marketer:      650,
   producer:      800,
+  nurse:         600,
+  webDesigner:   550,
+  hrSpecialist:  600,
+  lawyer:        1000,
+  projectManager:850,
+  writer:        450,
+  counselor:     450,
+  chef:          400,
+  beautician:    350,
+  socialWorker:  380,
 }
 
 // Dimension weights for matching (higher = more discriminating)

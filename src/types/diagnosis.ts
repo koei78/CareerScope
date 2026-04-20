@@ -51,6 +51,9 @@ export type CareerTypeId =
   | 'researcher' | 'creator' | 'engineer' | 'consultant'
   | 'finance' | 'medical' | 'publicServant' | 'craftsman'
   | 'educator' | 'marketer' | 'producer'
+  | 'nurse' | 'webDesigner' | 'hrSpecialist' | 'lawyer'
+  | 'projectManager' | 'writer' | 'counselor' | 'chef'
+  | 'beautician' | 'socialWorker'
 
 export const CAREER_TYPE_LABELS: Record<CareerTypeId, string> = {
   entrepreneur: '起業家型',
@@ -68,6 +71,16 @@ export const CAREER_TYPE_LABELS: Record<CareerTypeId, string> = {
   educator: '教育型',
   marketer: 'マーケター型',
   producer: 'プロデューサー型',
+  nurse: '医療・看護型',
+  webDesigner: 'Webデザイナー型',
+  hrSpecialist: '人事・HR型',
+  lawyer: '法律・士業型',
+  projectManager: 'プロジェクトマネージャー型',
+  writer: 'ライター・編集型',
+  counselor: 'カウンセラー・支援型',
+  chef: '料理人・シェフ型',
+  beautician: '美容師・スタイリスト型',
+  socialWorker: '社会福祉・NPO型',
 }
 
 export const CAREER_TYPE_ICONS: Record<CareerTypeId, string> = {
@@ -86,6 +99,16 @@ export const CAREER_TYPE_ICONS: Record<CareerTypeId, string> = {
   educator: '📚',
   marketer: '📣',
   producer: '🎬',
+  nurse: '💊',
+  webDesigner: '🖥️',
+  hrSpecialist: '🤝',
+  lawyer: '⚖️',
+  projectManager: '📋',
+  writer: '✍️',
+  counselor: '🫂',
+  chef: '👨‍🍳',
+  beautician: '💇',
+  socialWorker: '🌱',
 }
 
 export const CAREER_TYPE_DESCRIPTIONS: Record<CareerTypeId, string> = {
@@ -104,6 +127,16 @@ export const CAREER_TYPE_DESCRIPTIONS: Record<CareerTypeId, string> = {
   educator: '知識と情熱で次世代を育て、社会の知的基盤を作るメンター',
   marketer: '市場洞察と創造性でブランドと顧客をつなぐストーリーテラー',
   producer: '多様な才能をまとめ、プロジェクトを成功に導くオーケストレーター',
+  nurse: '高い共感力と技術力で患者・利用者に寄り添う医療・ケアのプロ',
+  webDesigner: '美的センスと技術でユーザーが使いたくなるデジタル体験を作るデザイナー',
+  hrSpecialist: '人と組織をつなぎ、働きやすい環境と人材を育てるピープルマネージャー',
+  lawyer: '法律の知識と論理で人々の権利と正義を守るプロフェッショナル',
+  projectManager: '計画・調整・実行を通じてチームを成功へ導くコーディネーター',
+  writer: '言葉と表現力で読者に価値を届けるコンテンツクリエイター',
+  counselor: '傾聴と共感で人々の心に寄り添い、成長を支援するサポーター',
+  chef: '創造性と技術で食という体験を通じて人を幸せにするアーティスト',
+  beautician: '美と個性を引き出すセンスと技術で人々の自信を高めるスタイリスト',
+  socialWorker: '社会課題に向き合い、人と地域のつながりをつくる変革者',
 }
 
 export type IncomeRange = '<300' | '300-600' | '600-1000' | '1000-3000' | '>3000'
