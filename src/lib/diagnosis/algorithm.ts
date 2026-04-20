@@ -1,0 +1,204 @@
+import type {
+  Dimension, DimensionScores, CareerTypeId, CareerTypeMatch,
+  IncomeEstimate, IncomeRange, GrowthSpeed, DiagnosisResult,
+  DiagnosisAnswers,
+} from '@/types/diagnosis'
+import {
+  calculateRawScores, normalizeScores, calculateReliabilityScore,
+  getStrengths, getWeaknesses,
+} from './scoring'
+import { clamp } from '@/lib/utils'
+
+// Career type dimension profiles (0-100 scale)
+const CAREER_TYPE_PROFILES: Record<CareerTypeId, DimensionScores> = {
+  entrepreneur:  { RT:90, AT:75, LP:90, ID:95, SI:70, TA:60, SP:10, AM:95, CT:80, PE:85 },
+  executive:     { RT:75, AT:85, LP:95, ID:70, SI:85, TA:50, SP:30, AM:90, CT:60, PE:80 },
+  specialist:    { RT:40, AT:90, LP:50, ID:65, SI:60, TA:90, SP:60, AM:80, CT:70, PE:85 },
+  sales:         { RT:65, AT:55, LP:70, ID:60, SI:95, TA:30, SP:40, AM:85, CT:50, PE:75 },
+  researcher:    { RT:50, AT:95, LP:45, ID:85, SI:45, TA:90, SP:55, AM:75, CT:85, PE:90 },
+  creator:       { RT:55, AT:60, LP:45, ID:90, SI:60, TA:65, SP:30, AM:75, CT:95, PE:70 },
+  engineer:      { RT:55, AT:90, LP:55, ID:75, SI:55, TA:95, SP:55, AM:75, CT:70, PE:80 },
+  consultant:    { RT:65, AT:95, LP:75, ID:70, SI:75, TA:70, SP:40, AM:85, CT:65, PE:75 },
+  finance:       { RT:70, AT:90, LP:65, ID:65, SI:65, TA:75, SP:45, AM:90, CT:55, PE:80 },
+  medical:       { RT:35, AT:85, LP:60, ID:55, SI:85, TA:90, SP:70, AM:80, CT:50, PE:90 },
+  publicServant: { RT:20, AT:65, LP:50, ID:40, SI:70, TA:50, SP:90, AM:55, CT:40, PE:75 },
+  craftsman:     { RT:40, AT:55, LP:50, ID:50, SI:65, TA:80, SP:70, AM:65, CT:55, PE:85 },
+  educator:      { RT:35, AT:75, LP:65, ID:60, SI:90, TA:55, SP:65, AM:70, CT:65, PE:80 },
+  marketer:      { RT:65, AT:80, LP:65, ID:80, SI:75, TA:65, SP:40, AM:80, CT:85, PE:70 },
+  producer:      { RT:70, AT:75, LP:80, ID:85, SI:85, TA:55, SP:35, AM:85, CT:80, PE:75 },
+}
+
+// Base median income (万円/年) for each career type
+const BASE_MEDIAN_INCOME: Record<CareerTypeId, number> = {
+  entrepreneur:  3500,
+  executive:     1800,
+  specialist:    900,
+  sales:         700,
+  researcher:    800,
+  creator:       500,
+  engineer:      750,
+  consultant:    1200,
+  finance:       1000,
+  medical:       1200,
+  publicServant: 550,
+  craftsman:     450,
+  educator:      500,
+  marketer:      650,
+  producer:      800,
+}
+
+// Dimension weights for matching (higher = more discriminating)
+const MATCH_WEIGHTS: Record<Dimension, number> = {
+  RT: 1.2, AT: 1.3, LP: 1.1, ID: 1.0, SI: 1.0,
+  TA: 1.0, SP: 0.9, AM: 1.4, CT: 1.0, PE: 1.2,
+}
+
+const DIMS: Dimension[] = ['RT', 'AT', 'LP', 'ID', 'SI', 'TA', 'SP', 'AM', 'CT', 'PE']
+
+function weightedCosineSimilarity(userScores: DimensionScores, profile: DimensionScores): number {
+  let dot = 0
+  let magUser = 0
+  let magProfile = 0
+
+  for (const dim of DIMS) {
+    const w = MATCH_WEIGHTS[dim]
+    const u = (userScores[dim] ?? 0) / 100
+    const p = (profile[dim] ?? 0) / 100
+    dot += w * u * p
+    magUser += w * u * u
+    magProfile += w * p * p
+  }
+
+  const mag = Math.sqrt(magUser) * Math.sqrt(magProfile)
+  if (mag === 0) return 0
+  return clamp((dot / mag) * 100, 0, 100)
+}
+
+function matchCareerTypes(userScores: DimensionScores): CareerTypeMatch[] {
+  const matches: { id: CareerTypeId; score: number }[] = []
+
+  for (const [typeId, profile] of Object.entries(CAREER_TYPE_PROFILES) as [CareerTypeId, DimensionScores][]) {
+    const score = weightedCosineSimilarity(userScores, profile)
+    matches.push({ id: typeId, score: Math.round(score) })
+  }
+
+  return matches
+    .sort((a, b) => b.score - a.score)
+    .map((m, i) => ({ id: m.id, matchScore: m.score, rank: i + 1 }))
+}
+
+function calcPerformanceMultiplier(scores: DimensionScores): number {
+  return (
+    scores.AT * 0.20 +
+    scores.AM * 0.25 +
+    scores.PE * 0.15 +
+    scores.LP * 0.15 +
+    scores.RT * 0.10 +
+    scores.ID * 0.15
+  ) / 100
+}
+
+function estimateIncome(
+  topType: CareerTypeId,
+  scores: DimensionScores,
+): IncomeEstimate {
+  const baseMedian = BASE_MEDIAN_INCOME[topType]
+  const perf = calcPerformanceMultiplier(scores)
+
+  // Income = base × (0.60 + perf × 0.80) → range: 0.60x ~ 1.40x
+  const currentMedian = Math.round(baseMedian * (0.60 + perf * 0.80))
+
+  const growthComposite = (
+    scores.AM * 0.30 +
+    scores.ID * 0.20 +
+    scores.PE * 0.25 +
+    scores.AT * 0.15 +
+    scores.LP * 0.10
+  ) / 100
+
+  const annualGrowthRate = 0.03 + growthComposite * 0.08 // 3% ~ 11%/year
+
+  const year5 = Math.round(currentMedian * Math.pow(1 + annualGrowthRate, 5))
+  const year10 = Math.round(currentMedian * Math.pow(1 + annualGrowthRate, 10))
+
+  let range: IncomeRange
+  if (currentMedian < 300) range = '<300'
+  else if (currentMedian < 600) range = '300-600'
+  else if (currentMedian < 1000) range = '600-1000'
+  else if (currentMedian < 3000) range = '1000-3000'
+  else range = '>3000'
+
+  return { currentMedian, year5, year10, range, annualGrowthRate }
+}
+
+function calcSuccessProbability(scores: DimensionScores): number {
+  return clamp(Math.round(
+    scores.AM * 0.25 +
+    scores.PE * 0.25 +
+    scores.AT * 0.20 +
+    scores.LP * 0.15 +
+    scores.RT * 0.15
+  ), 0, 100)
+}
+
+function calcGrowthSpeed(scores: DimensionScores): GrowthSpeed {
+  const composite = (
+    scores.AM * 0.30 +
+    scores.ID * 0.20 +
+    scores.PE * 0.25 +
+    scores.AT * 0.15 +
+    scores.LP * 0.10
+  ) / 100
+
+  if (composite > 0.70) return 'fast'
+  if (composite > 0.45) return 'medium'
+  return 'slow'
+}
+
+const PRIORITY_SKILLS_MAP: Record<Dimension, string[]> = {
+  RT: ['リスク管理・意思決定力', '投資・資産運用の知識', '不確実性への耐性トレーニング'],
+  AT: ['データ分析・統計', 'ロジカルシンキング', 'SQL・Pythonなどの分析ツール'],
+  LP: ['チームマネジメント', 'プレゼンテーション・交渉力', 'コーチング・ファシリテーション'],
+  ID: ['デザイン思考・UX', 'ビジネスモデル設計', '市場調査・トレンド分析'],
+  SI: ['傾聴力・共感力の訓練', 'ネットワーキング', '対人コミュニケーション'],
+  TA: ['専門技術の継続学習', '資格取得・認定', 'ツール・技術の実践経験'],
+  SP: ['プロジェクト管理（PMP・Agile）', 'リスク管理', '業務プロセス設計'],
+  AM: ['目標設定フレームワーク（OKR）', 'メンタルトレーニング', '成果計測の習慣化'],
+  CT: ['デザイン・表現スキル', 'アイデア発想法（SCAMPER・ブレスト）', 'クリエイティブな副業'],
+  PE: ['習慣化メソッド', '長期プロジェクト管理', 'リカバリー・回復力の強化'],
+}
+
+function getPrioritySkills(weaknesses: Dimension[]): string[] {
+  const skills: string[] = []
+  for (const dim of weaknesses.slice(0, 3)) {
+    skills.push(...(PRIORITY_SKILLS_MAP[dim]?.slice(0, 2) ?? []))
+  }
+  return skills.slice(0, 5)
+}
+
+export function runDiagnosis(answers: DiagnosisAnswers): DiagnosisResult {
+  const raw = calculateRawScores(answers)
+  const dimensionScores = normalizeScores(raw)
+  const careerTypeMatches = matchCareerTypes(dimensionScores)
+  const topCareerType = careerTypeMatches[0].id
+  const incomeEstimate = estimateIncome(topCareerType, dimensionScores)
+  const successProbability = calcSuccessProbability(dimensionScores)
+  const growthSpeed = calcGrowthSpeed(dimensionScores)
+  const reliabilityScore = calculateReliabilityScore(answers)
+  const strengths = getStrengths(dimensionScores, 3)
+  const weaknesses = getWeaknesses(dimensionScores, 3)
+  const prioritySkills = getPrioritySkills(weaknesses)
+
+  return {
+    dimensionScores,
+    careerTypeMatches,
+    topCareerType,
+    incomeEstimate,
+    successProbability,
+    growthSpeed,
+    reliabilityScore,
+    strengths,
+    weaknesses,
+    prioritySkills,
+  }
+}
