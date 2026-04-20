@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, RefreshCw, Shield } from 'lucide-react'
+import { RefreshCw, Shield } from 'lucide-react'
 import { useDiagnosisStore } from '@/store/diagnosisStore'
 import { CareerTypeCard } from '@/components/result/CareerTypeCard'
 import { RadarChartSection } from '@/components/result/RadarChartSection'
@@ -133,29 +133,15 @@ export default function ResultPage() {
           <ShareSection result={result} />
         </section>
 
-        {/* Retry / Upgrade */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 card">
-          <div>
-            <h3 className="font-bold text-[#0f172a] mb-1">さらに精度を上げるには</h3>
-            <p className="text-[#475569] text-sm">
-              追加10問の詳細診断で信頼度を95%以上に向上させられます。
-            </p>
-          </div>
-          <div className="flex gap-3 flex-shrink-0">
-            <button
-              onClick={handleRetry}
-              className="flex items-center gap-2 px-4 py-2 border border-[#e2e8f0] rounded-xl text-[#475569] text-sm hover:bg-[#f8f9fc] transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-              再診断
-            </button>
-            <Link
-              href="/pricing"
-              className="btn-primary text-sm py-2 px-5"
-            >
-              詳細診断を受ける →
-            </Link>
-          </div>
+        {/* Retry */}
+        <div className="flex justify-center">
+          <button
+            onClick={handleRetry}
+            className="flex items-center gap-2 px-6 py-3 border border-[#e2e8f0] rounded-xl text-[#475569] text-sm hover:bg-[#f8f9fc] transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            もう一度診断する
+          </button>
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import { Menu, X, Compass } from 'lucide-react'
 const NAV_ITEMS = [
   { label: '診断とは', href: '/about' },
   { label: '職業一覧', href: '/careers' },
-  { label: '料金プラン', href: '/pricing' },
   { label: 'ブログ', href: '/blog' },
 ]
 
@@ -43,12 +42,6 @@ export function Header() {
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/mypage"
-              className="text-sm font-medium text-[#475569] hover:text-[#1e3a5f] transition-colors"
-            >
-              ログイン
-            </Link>
             <Link href="/diagnosis" className="btn-primary text-sm py-2 px-4">
               診断スタート
             </Link>
@@ -78,17 +71,10 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="pt-3 border-t border-[#e2e8f0] flex flex-col gap-2">
-            <Link
-              href="/mypage"
-              className="btn-outline text-sm py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              ログイン
-            </Link>
+          <div className="pt-3 border-t border-[#e2e8f0]">
             <Link
               href="/diagnosis"
-              className="btn-primary text-sm py-2"
+              className="btn-primary text-sm py-2 block text-center"
               onClick={() => setIsMenuOpen(false)}
             >
               診断スタート（無料）

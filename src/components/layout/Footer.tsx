@@ -6,7 +6,6 @@ const FOOTER_LINKS = {
     { label: '診断とは', href: '/about' },
     { label: '診断スタート', href: '/diagnosis' },
     { label: '職業一覧', href: '/careers' },
-    { label: '料金プラン', href: '/pricing' },
   ],
   コンテンツ: [
     { label: 'ブログ', href: '/blog' },
