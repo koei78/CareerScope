@@ -24,17 +24,19 @@ export default function QuestionsPage() {
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward')
   const [isCalculating, setIsCalculating] = useState(false)
 
-  const question = QUESTIONS.find(q => q.id === currentQuestion)!
-  const selectedOption = answers[currentQuestion]
+  const questionIndex = QUESTIONS.findIndex(q => q.id === currentQuestion)
+  const question = QUESTIONS[questionIndex >= 0 ? questionIndex : 0]
+  const selectedOption = answers[question?.id]
   const canGoNext = !!selectedOption
+  const isLastQuestion = questionIndex === QUESTIONS.length - 1
+  const displayNumber = questionIndex + 1
 
   const goNext = useCallback(async () => {
     if (!canGoNext) return
 
-    if (currentQuestion === TOTAL_QUESTIONS) {
-      // Final question - run diagnosis
+    if (isLastQuestion) {
       setIsCalculating(true)
-      await new Promise(r => setTimeout(r, 1800)) // Simulate analysis
+      await new Promise(r => setTimeout(r, 1800))
       const result = runDiagnosis(answers)
       setResult(result)
       setIsCalculating(false)
@@ -43,18 +45,18 @@ export default function QuestionsPage() {
     }
 
     setDirection('forward')
-    setCurrentQuestion(currentQuestion + 1)
-  }, [canGoNext, currentQuestion, answers, router, setCurrentQuestion, setResult])
+    setCurrentQuestion(QUESTIONS[questionIndex + 1].id)
+  }, [canGoNext, isLastQuestion, questionIndex, answers, router, setCurrentQuestion, setResult])
 
   const goBack = useCallback(() => {
-    if (currentQuestion === 1) {
+    if (questionIndex === 0) {
       resetDiagnosis()
       router.push('/diagnosis')
       return
     }
     setDirection('backward')
-    setCurrentQuestion(currentQuestion - 1)
-  }, [currentQuestion, router, resetDiagnosis, setCurrentQuestion])
+    setCurrentQuestion(QUESTIONS[questionIndex - 1].id)
+  }, [questionIndex, router, resetDiagnosis, setCurrentQuestion])
 
   const handleSelect = useCallback(
     (optionId: 'A' | 'B' | 'C' | 'D') => {
@@ -97,13 +99,13 @@ export default function QuestionsPage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         {/* Progress */}
         <div className="mb-8">
-          <ProgressBar current={currentQuestion} total={TOTAL_QUESTIONS} />
+          <ProgressBar current={displayNumber} total={TOTAL_QUESTIONS} />
         </div>
 
         {/* Question */}
         <div className="card mb-6 min-h-[420px]">
           <div className="text-xs font-semibold text-[#94a3b8] mb-4 tracking-wider uppercase">
-            Q{currentQuestion.toString().padStart(2, '0')}
+            Q{displayNumber.toString().padStart(2, '0')}
           </div>
           <QuestionCard
             question={question}
@@ -137,7 +139,7 @@ export default function QuestionsPage() {
                 : 'bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed',
             )}
           >
-            {currentQuestion === TOTAL_QUESTIONS ? '診断結果を見る' : '次へ'}
+            {isLastQuestion ? '診断結果を見る' : '次へ'}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

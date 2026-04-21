@@ -5,16 +5,16 @@ import { clamp } from '@/lib/utils'
 // Maximum theoretical raw score per dimension (used for normalization)
 // Updated to account for Section F questions (Q31-Q35) which add TA/SI/CT coverage
 const MAX_RAW_SCORES: Record<Dimension, number> = {
-  RT: 21,
-  AT: 37,
-  LP: 27,
-  ID: 27,
-  SI: 31,
-  TA: 25,
-  SP: 15,
-  AM: 34,
-  CT: 28,
-  PE: 27,
+  RT: 36,
+  AT: 52,
+  LP: 35,
+  ID: 42,
+  SI: 45,
+  TA: 24,
+  SP: 30,
+  AM: 50,
+  CT: 34,
+  PE: 40,
 }
 
 export function calculateRawScores(answers: DiagnosisAnswers): Record<Dimension, number> {

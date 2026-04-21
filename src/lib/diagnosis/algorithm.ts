@@ -10,32 +10,34 @@ import {
 import { clamp } from '@/lib/utils'
 
 // Career type dimension profiles (0-100 scale)
+// Each type has 1-2 "signature" dimensions that are extreme (≥90) to ensure clear separation.
+// Types that previously clustered (consultant/executive/finance/PM) now have distinct peaks.
 const CAREER_TYPE_PROFILES: Record<CareerTypeId, DimensionScores> = {
-  entrepreneur:  { RT:90, AT:75, LP:90, ID:95, SI:70, TA:60, SP:10, AM:95, CT:80, PE:85 },
-  executive:     { RT:75, AT:85, LP:95, ID:70, SI:85, TA:50, SP:30, AM:90, CT:60, PE:80 },
-  specialist:    { RT:40, AT:90, LP:50, ID:65, SI:60, TA:90, SP:60, AM:80, CT:70, PE:85 },
-  sales:         { RT:65, AT:55, LP:70, ID:60, SI:95, TA:30, SP:40, AM:85, CT:50, PE:75 },
-  researcher:    { RT:50, AT:95, LP:45, ID:85, SI:45, TA:90, SP:55, AM:75, CT:85, PE:90 },
-  creator:       { RT:55, AT:60, LP:45, ID:90, SI:60, TA:65, SP:30, AM:75, CT:95, PE:70 },
-  engineer:      { RT:55, AT:90, LP:55, ID:75, SI:55, TA:95, SP:55, AM:75, CT:70, PE:80 },
-  consultant:    { RT:65, AT:95, LP:75, ID:70, SI:75, TA:70, SP:40, AM:85, CT:65, PE:75 },
-  finance:       { RT:70, AT:90, LP:65, ID:65, SI:65, TA:75, SP:45, AM:90, CT:55, PE:80 },
-  medical:       { RT:35, AT:85, LP:60, ID:55, SI:85, TA:90, SP:70, AM:80, CT:50, PE:90 },
-  publicServant: { RT:20, AT:65, LP:50, ID:40, SI:70, TA:50, SP:90, AM:55, CT:40, PE:75 },
-  craftsman:     { RT:40, AT:55, LP:50, ID:50, SI:65, TA:80, SP:70, AM:65, CT:55, PE:85 },
-  educator:      { RT:35, AT:75, LP:65, ID:60, SI:90, TA:55, SP:65, AM:70, CT:65, PE:80 },
-  marketer:      { RT:65, AT:80, LP:65, ID:80, SI:75, TA:65, SP:40, AM:80, CT:85, PE:70 },
-  producer:      { RT:70, AT:75, LP:80, ID:85, SI:85, TA:55, SP:35, AM:85, CT:80, PE:75 },
-  nurse:         { RT:30, AT:70, LP:55, ID:45, SI:90, TA:85, SP:75, AM:70, CT:40, PE:90 },
-  webDesigner:   { RT:50, AT:65, LP:40, ID:80, SI:60, TA:85, SP:45, AM:65, CT:90, PE:75 },
-  hrSpecialist:  { RT:40, AT:70, LP:70, ID:55, SI:85, TA:45, SP:60, AM:70, CT:50, PE:75 },
-  lawyer:        { RT:45, AT:90, LP:65, ID:50, SI:70, TA:60, SP:65, AM:80, CT:45, PE:90 },
-  projectManager:{ RT:60, AT:80, LP:85, ID:65, SI:75, TA:60, SP:55, AM:80, CT:55, PE:80 },
-  writer:        { RT:45, AT:70, LP:40, ID:70, SI:65, TA:50, SP:50, AM:65, CT:90, PE:80 },
-  counselor:     { RT:30, AT:65, LP:55, ID:50, SI:95, TA:50, SP:70, AM:65, CT:55, PE:85 },
-  chef:          { RT:50, AT:55, LP:60, ID:75, SI:70, TA:85, SP:55, AM:75, CT:80, PE:90 },
-  beautician:    { RT:45, AT:45, LP:55, ID:65, SI:85, TA:75, SP:55, AM:65, CT:80, PE:85 },
-  socialWorker:  { RT:35, AT:60, LP:60, ID:60, SI:90, TA:40, SP:65, AM:70, CT:50, PE:80 },
+  entrepreneur:  { RT:95, AT:70, LP:85, ID:95, SI:60, TA:40, SP:5,  AM:95, CT:75, PE:85 },
+  executive:     { RT:60, AT:75, LP:95, ID:65, SI:90, TA:40, SP:40, AM:85, CT:50, PE:80 },
+  specialist:    { RT:35, AT:90, LP:45, ID:60, SI:55, TA:95, SP:65, AM:80, CT:60, PE:90 },
+  sales:         { RT:65, AT:45, LP:75, ID:55, SI:95, TA:25, SP:35, AM:85, CT:50, PE:70 },
+  researcher:    { RT:45, AT:95, LP:40, ID:85, SI:40, TA:90, SP:55, AM:75, CT:70, PE:90 },
+  creator:       { RT:55, AT:45, LP:35, ID:90, SI:55, TA:50, SP:30, AM:70, CT:95, PE:75 },
+  engineer:      { RT:50, AT:90, LP:50, ID:70, SI:50, TA:95, SP:55, AM:75, CT:65, PE:85 },
+  consultant:    { RT:65, AT:95, LP:65, ID:75, SI:65, TA:65, SP:40, AM:90, CT:60, PE:75 },
+  finance:       { RT:75, AT:95, LP:55, ID:60, SI:50, TA:70, SP:50, AM:95, CT:40, PE:85 },
+  medical:       { RT:30, AT:85, LP:55, ID:50, SI:80, TA:95, SP:75, AM:80, CT:45, PE:95 },
+  publicServant: { RT:15, AT:65, LP:45, ID:35, SI:70, TA:45, SP:95, AM:50, CT:35, PE:80 },
+  craftsman:     { RT:35, AT:50, LP:40, ID:50, SI:60, TA:90, SP:75, AM:65, CT:60, PE:90 },
+  educator:      { RT:30, AT:70, LP:70, ID:60, SI:90, TA:55, SP:65, AM:70, CT:60, PE:85 },
+  marketer:      { RT:65, AT:80, LP:60, ID:80, SI:75, TA:55, SP:35, AM:80, CT:85, PE:70 },
+  producer:      { RT:65, AT:65, LP:85, ID:90, SI:85, TA:45, SP:30, AM:85, CT:80, PE:75 },
+  nurse:         { RT:25, AT:65, LP:50, ID:40, SI:95, TA:85, SP:80, AM:70, CT:35, PE:95 },
+  webDesigner:   { RT:50, AT:60, LP:35, ID:80, SI:55, TA:85, SP:45, AM:65, CT:95, PE:75 },
+  hrSpecialist:  { RT:35, AT:65, LP:75, ID:50, SI:90, TA:40, SP:65, AM:70, CT:45, PE:80 },
+  lawyer:        { RT:45, AT:95, LP:60, ID:45, SI:65, TA:55, SP:70, AM:85, CT:40, PE:95 },
+  projectManager:{ RT:55, AT:75, LP:85, ID:60, SI:70, TA:65, SP:65, AM:80, CT:50, PE:85 },
+  writer:        { RT:45, AT:65, LP:30, ID:70, SI:55, TA:45, SP:55, AM:65, CT:95, PE:85 },
+  counselor:     { RT:25, AT:55, LP:50, ID:45, SI:95, TA:45, SP:75, AM:65, CT:55, PE:90 },
+  chef:          { RT:50, AT:50, LP:60, ID:80, SI:70, TA:90, SP:55, AM:75, CT:85, PE:95 },
+  beautician:    { RT:45, AT:40, LP:55, ID:70, SI:90, TA:75, SP:55, AM:65, CT:85, PE:90 },
+  socialWorker:  { RT:30, AT:55, LP:65, ID:60, SI:95, TA:35, SP:65, AM:70, CT:50, PE:85 },
 }
 
 // Base median income (万円/年) — realistic Japanese market medians (not best-case)
@@ -217,10 +219,43 @@ function getPrioritySkills(weaknesses: Dimension[]): string[] {
   return skills.slice(0, 5)
 }
 
+// Penalise aspirational career types when real-world evidence doesn't support the match.
+// Entrepreneur/executive attract anyone with high AM because those types value achievement —
+// but true entrepreneurial fit requires demonstrated action (Q28) and genuine risk/anti-stability signals.
+function applyContextualPenalties(
+  matches: CareerTypeMatch[],
+  answers: DiagnosisAnswers,
+  scores: DimensionScores,
+): CareerTypeMatch[] {
+  const q28 = answers[28] // actual side-business / startup / investment experience
+
+  const adjusted = matches.map(m => {
+    let s = m.matchScore
+
+    if (m.id === 'entrepreneur') {
+      if (q28 === 'A') s = Math.round(s * 0.68)      // never acted → heavy penalty
+      else if (q28 === 'B') s = Math.round(s * 0.80) // only thought about it → moderate penalty
+      if (scores.SP > 50) s = Math.round(s * 0.82)   // still wants stability → not entrepreneurial
+    }
+
+    if (m.id === 'executive') {
+      if (scores.LP < 60) s = Math.round(s * 0.78)   // low leadership → poor executive fit
+      if (scores.SI < 55) s = Math.round(s * 0.85)   // weak people-reading → poor exec fit
+    }
+
+    return { ...m, matchScore: Math.max(s, 1) }
+  })
+
+  return adjusted
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .map((m, i) => ({ ...m, rank: i + 1 }))
+}
+
 export function runDiagnosis(answers: DiagnosisAnswers): DiagnosisResult {
   const raw = calculateRawScores(answers)
   const dimensionScores = normalizeScores(raw)
-  const careerTypeMatches = matchCareerTypes(dimensionScores)
+  const rawMatches = matchCareerTypes(dimensionScores)
+  const careerTypeMatches = applyContextualPenalties(rawMatches, answers, dimensionScores)
   const topCareerType = careerTypeMatches[0].id
   const incomeEstimate = estimateIncome(topCareerType, dimensionScores)
   const successProbability = calcSuccessProbability(dimensionScores)

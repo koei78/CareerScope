@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { RefreshCw, Shield } from 'lucide-react'
 import { useDiagnosisStore } from '@/store/diagnosisStore'
+import { PersonalityBadge } from '@/components/result/PersonalityBadge'
 import { CareerTypeCard } from '@/components/result/CareerTypeCard'
 import { RadarChartSection } from '@/components/result/RadarChartSection'
 import { IncomeProjection } from '@/components/result/IncomeProjection'
 import { CareerRankingSection } from '@/components/result/CareerRankingSection'
 import { SkillsSection } from '@/components/result/SkillsSection'
+import { AdviceSection } from '@/components/result/AdviceSection'
 import { ShareSection } from '@/components/result/ShareSection'
 import {
   CAREER_TYPE_LABELS, CAREER_TYPE_ICONS, INCOME_RANGE_LABELS,
@@ -70,6 +72,7 @@ export default function ResultPage() {
                   成長速度: {GROWTH_SPEED_LABELS[growthSpeed]}
                 </span>
               </div>
+              <PersonalityBadge topCareerType={topCareerType} />
             </div>
 
             <div className="flex flex-col items-center bg-white/10 border border-white/20 rounded-xl px-4 py-3 flex-shrink-0">
@@ -123,9 +126,17 @@ export default function ResultPage() {
           />
         </section>
 
+        {/* Advice & Growth Paths */}
+        <section>
+          <h2 className="text-lg font-bold text-[#0f172a] mb-4">
+            💡 あなたへのキャリアアドバイス
+          </h2>
+          <AdviceSection topCareerType={topCareerType} />
+        </section>
+
         {/* Career Ranking */}
         <section>
-          <CareerRankingSection scores={dimensionScores} />
+          <CareerRankingSection scores={dimensionScores} careerTypeMatches={careerTypeMatches} />
         </section>
 
         {/* Share */}

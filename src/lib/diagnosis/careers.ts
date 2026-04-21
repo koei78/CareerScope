@@ -1,5 +1,5 @@
 import type { Career, CareerRankItem } from '@/types/career'
-import type { DimensionScores } from '@/types/diagnosis'
+import type { CareerTypeId, CareerTypeMatch, DimensionScores } from '@/types/diagnosis'
 
 export const CAREERS: Career[] = [
   // IT系
@@ -323,6 +323,38 @@ export const CAREERS: Career[] = [
     careerPath: ['福祉士', 'ケースワーカー', 'スーパーバイザー', '施設長・管理職'],
     relatedCareers: ['educator', 'counselor', 'nurse'],
   },
+  // 公務系
+  {
+    id: 'civil-servant',
+    slug: 'civil-servant',
+    name: '公務員・行政職',
+    category: 'public',
+    description: '安定した基盤の中で社会・地域に貢献するサービスプロバイダー',
+    medianIncome: 580,
+    incomeRange: { min: 380, max: 900 },
+    requiredSkills: ['法令知識', '文書作成力', '調整力', '公正な判断力', '継続力'],
+    avgYearsToReach: 1,
+    growthOutlook: 'stable',
+    workStyle: ['安定', '社会貢献', '年功序列'],
+    careerPath: ['一般職', '係長', '課長', '部長', '局長・幹部'],
+    relatedCareers: ['management-consultant', 'social-worker', 'researcher'],
+  },
+  // 営業系
+  {
+    id: 'sales-representative',
+    slug: 'sales-representative',
+    name: '法人営業・セールス',
+    category: 'sales',
+    description: '人との関係構築と交渉力で成果を生み出すコミュニケーター',
+    medianIncome: 600,
+    incomeRange: { min: 350, max: 2000 },
+    requiredSkills: ['提案力', '傾聴力', '交渉力', '目標管理', '業界知識'],
+    avgYearsToReach: 2,
+    growthOutlook: 'stable',
+    workStyle: ['成果主義', '外勤多い', 'インセンティブあり'],
+    careerPath: ['営業担当', 'シニア営業', '営業マネージャー', '営業部長', '役員'],
+    relatedCareers: ['marketing-director', 'management-consultant', 'startup-founder'],
+  },
   // 教育・研究系
   {
     id: 'researcher',
@@ -341,10 +373,66 @@ export const CAREERS: Career[] = [
   },
 ]
 
-export function rankCareersForUser(scores: DimensionScores): CareerRankItem[] {
-  return CAREERS.map(career => {
-    // Simple scoring based on career category alignment
-    const aptitudeScore = calcAptitudeScore(career, scores)
+// Maps each career entry to the CareerTypeId in algorithm.ts so we can reuse match scores.
+// Careers sharing a type (e.g. venture-capitalist + investment-banker → finance) get a
+// small per-career fine-tune offset from dimension scores to break ties.
+const CAREER_TYPE_MAP: Record<string, CareerTypeId> = {
+  'software-engineer':     'engineer',
+  'data-scientist':        'researcher',
+  'product-manager':       'producer',
+  'management-consultant': 'consultant',
+  'startup-founder':       'entrepreneur',
+  'marketing-director':    'marketer',
+  'venture-capitalist':    'entrepreneur', // risk + finance blend
+  'investment-banker':     'finance',
+  'ux-designer':           'creator',
+  'content-creator':       'creator',
+  'physician':             'medical',
+  'lawyer':                'lawyer',
+  'project-manager':       'projectManager',
+  'web-designer':          'webDesigner',
+  'hr-specialist':         'hrSpecialist',
+  'nurse':                 'nurse',
+  'writer':                'writer',
+  'counselor':             'counselor',
+  'chef':                  'chef',
+  'beautician':            'beautician',
+  'social-worker':         'socialWorker',
+  'researcher':            'researcher',
+  'civil-servant':         'publicServant',
+  'sales-representative':  'sales',
+}
+
+// Small per-career fine-tune: blended weight of a secondary type when a career bridges two archetypes.
+// Value = blend ratio (0–1) of the secondary type's match score.
+const CAREER_SECONDARY_TYPE: Record<string, { typeId: CareerTypeId; weight: number }> = {
+  'venture-capitalist': { typeId: 'finance',      weight: 0.40 },
+  'product-manager':    { typeId: 'projectManager', weight: 0.35 },
+  'data-scientist':     { typeId: 'specialist',   weight: 0.30 },
+  'ux-designer':        { typeId: 'webDesigner',  weight: 0.35 },
+  'content-creator':    { typeId: 'writer',       weight: 0.30 },
+  'physician':          { typeId: 'specialist',   weight: 0.25 },
+}
+
+export function rankCareersForUser(
+  scores: DimensionScores,
+  careerTypeMatches: CareerTypeMatch[],
+): CareerRankItem[] {
+  const matchScoreMap = new Map(careerTypeMatches.map(m => [m.id, m.matchScore]))
+
+  const ranked = CAREERS.map(career => {
+    const primaryTypeId = CAREER_TYPE_MAP[career.id]
+    const primaryScore = primaryTypeId ? (matchScoreMap.get(primaryTypeId) ?? 50) : 50
+
+    const secondary = CAREER_SECONDARY_TYPE[career.id]
+    let aptitudeScore: number
+    if (secondary) {
+      const secondaryScore = matchScoreMap.get(secondary.typeId) ?? 50
+      aptitudeScore = Math.round(primaryScore * (1 - secondary.weight) + secondaryScore * secondary.weight)
+    } else {
+      aptitudeScore = primaryScore
+    }
+
     const successProbability = Math.round(aptitudeScore * 0.9)
     const incomeMultiplier = (
       scores.AM * 0.25 + scores.PE * 0.20 + scores.AT * 0.15 +
@@ -360,39 +448,9 @@ export function rankCareersForUser(scores: DimensionScores): CareerRankItem[] {
       caution: getCaution(career, scores),
       estimatedMedianIncome,
     }
-  }).sort((a, b) => b.aptitudeScore - a.aptitudeScore)
-}
+  })
 
-function calcAptitudeScore(career: Career, scores: DimensionScores): number {
-  const categoryWeights: Record<string, Partial<Record<keyof DimensionScores, number>>> = {
-    it:               { AT: 0.35, TA: 0.30, PE: 0.20, ID: 0.15 },
-    business:         { AT: 0.25, LP: 0.25, AM: 0.25, SI: 0.25 },
-    creative:         { CT: 0.35, ID: 0.30, PE: 0.20, SI: 0.15 },
-    medical:          { AT: 0.30, PE: 0.30, SI: 0.25, TA: 0.15 },
-    education:        { SI: 0.35, AT: 0.25, PE: 0.25, LP: 0.15 },
-    finance:          { AT: 0.35, RT: 0.25, AM: 0.25, PE: 0.15 },
-    public:           { SP: 0.35, SI: 0.30, PE: 0.25, AT: 0.10 },
-    craft:            { TA: 0.35, PE: 0.35, SP: 0.20, AT: 0.10 },
-    sales:            { SI: 0.40, AM: 0.30, RT: 0.20, LP: 0.10 },
-    entrepreneurship: { RT: 0.25, AM: 0.25, ID: 0.25, LP: 0.25 },
-    legal:            { AT: 0.40, PE: 0.30, LP: 0.20, SP: 0.10 },
-    management:       { LP: 0.35, AT: 0.25, PE: 0.25, SI: 0.15 },
-    design:           { CT: 0.40, TA: 0.30, ID: 0.20, PE: 0.10 },
-    hr:               { SI: 0.35, LP: 0.30, AT: 0.20, PE: 0.15 },
-    healthcare:       { SI: 0.35, TA: 0.30, PE: 0.25, AT: 0.10 },
-    media:            { CT: 0.35, AT: 0.25, PE: 0.25, SI: 0.15 },
-    wellness:         { SI: 0.45, PE: 0.25, AT: 0.20, LP: 0.10 },
-    hospitality:      { CT: 0.30, TA: 0.30, PE: 0.25, SI: 0.15 },
-    beauty:           { CT: 0.30, SI: 0.30, TA: 0.25, PE: 0.15 },
-    welfare:          { SI: 0.40, PE: 0.25, LP: 0.20, AT: 0.15 },
-  }
-
-  const weights = categoryWeights[career.category] ?? { AM: 0.25, PE: 0.25, AT: 0.25, LP: 0.25 }
-  let score = 0
-  for (const [dim, weight] of Object.entries(weights)) {
-    score += (scores[dim as keyof DimensionScores] ?? 0) * (weight as number)
-  }
-  return Math.round(Math.min(98, score))
+  return ranked.sort((a, b) => b.aptitudeScore - a.aptitudeScore)
 }
 
 function getFitReason(career: Career, scores: DimensionScores): string {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { DimensionScores } from '@/types/diagnosis'
+import type { CareerTypeMatch, DimensionScores } from '@/types/diagnosis'
 import { rankCareersForUser } from '@/lib/diagnosis/careers'
 import { CAREER_CATEGORY_LABELS } from '@/types/career'
 import type { CareerCategory } from '@/types/career'
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 
 interface Props {
   scores: DimensionScores
+  careerTypeMatches: CareerTypeMatch[]
 }
 
 const GROWTH_LABELS: Record<string, string> = {
@@ -19,11 +20,11 @@ const GROWTH_LABELS: Record<string, string> = {
   declining: '📉 縮小傾向',
 }
 
-export function CareerRankingSection({ scores }: Props) {
+export function CareerRankingSection({ scores, careerTypeMatches }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<CareerCategory | 'all'>('all')
   const [expanded, setExpanded] = useState<string | null>(null)
 
-  const allRanked = rankCareersForUser(scores)
+  const allRanked = rankCareersForUser(scores, careerTypeMatches)
   const categories = Object.keys(CAREER_CATEGORY_LABELS) as CareerCategory[]
 
   const filtered = selectedCategory === 'all'

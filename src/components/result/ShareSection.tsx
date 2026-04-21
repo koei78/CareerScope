@@ -5,6 +5,7 @@ import { toPng } from 'html-to-image'
 import { Share2, Download, BookmarkPlus, Loader2, CheckCircle2 } from 'lucide-react'
 import type { DiagnosisResult } from '@/types/diagnosis'
 import { CAREER_TYPE_LABELS, CAREER_TYPE_ICONS } from '@/types/diagnosis'
+import { CAREER_PERSONALITY } from '@/lib/diagnosis/personality'
 import { formatIncome } from '@/lib/utils'
 import { ResultShareCard } from './ResultShareCard'
 
@@ -26,7 +27,9 @@ export function ShareSection({ result }: Props) {
 
   const topType = result.topCareerType
   const income = result.incomeEstimate.currentMedian
-  const shareText = `CareerScopeで診断してみました！\n\n🎯 ${CAREER_TYPE_ICONS[topType]}${CAREER_TYPE_LABELS[topType]}\n💰 推定年収: ${formatIncome(income)}\n🚀 成功確率: ${result.successProbability}%\n\nあなたも診断してみて👇`
+  const personality = CAREER_PERSONALITY[topType]
+  const rarityText = personality ? `診断者の上位${personality.rarity}%` : ''
+  const shareText = `CareerScopeで診断しました！\n\n${CAREER_TYPE_ICONS[topType]}「${personality?.tagline ?? CAREER_TYPE_LABELS[topType]}」\n\n✅ タイプ: ${CAREER_TYPE_LABELS[topType]}\n💰 推定年収: ${formatIncome(income)}\n🚀 成功確率: ${result.successProbability}%\n👑 ${rarityText}\n\nあなたも診断してみて👇`
   const shareUrl = typeof window !== 'undefined' ? window.location.origin + '/diagnosis' : ''
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import type { Question } from '@/types/diagnosis'
 
 export const QUESTIONS: Question[] = [
-  // ─── Section A: 日常の選択シナリオ ────────────────────────────────
+  // ─── Section A: 思考パターン ──────────────────────────────────────────
   {
     id: 1,
     section: 'A',
-    sectionLabel: '日常の選択シナリオ',
+    sectionLabel: '思考パターン',
     question: '転職のオファーが届きました。給与は30%アップですが、相手は設立2年のスタートアップです。どうしますか？',
     options: [
       { id: 'A', text: '不安はあるが、成長できるチャンスとして前向きに検討する', scores: { RT: 3, LP: 3, AM: 2, AT: 1 } },
@@ -16,48 +16,9 @@ export const QUESTIONS: Question[] = [
     measureTypes: ['RT', 'LP', 'AM', 'AT', 'ID'],
   },
   {
-    id: 2,
-    section: 'A',
-    sectionLabel: '日常の選択シナリオ',
-    question: '趣味で続けてきたハンドメイド販売に、大手の格安サービスが参入してきました。どうしますか？',
-    options: [
-      { id: 'A', text: '大手には真似できないこだわりをさらに磨き、プレミアム路線に集中する', scores: { AT: 3, ID: 2, AM: 2 } },
-      { id: 'B', text: 'お客さんの声を集めて、独自の強みを打ち出す', scores: { ID: 3, AT: 2, SI: 2, AM: 2 } },
-      { id: 'C', text: 'むしろ大手にコラボや卸の提案をしてみる', scores: { LP: 2, SI: 3, AM: 2, AT: 1 } },
-      { id: 'D', text: 'ターゲットをさらに絞り、熱心なファンだけに特化する', scores: { AT: 3, ID: 2, SP: 1 } },
-    ],
-    measureTypes: ['AT', 'ID', 'SI', 'LP'],
-  },
-  {
-    id: 3,
-    section: 'A',
-    sectionLabel: '日常の選択シナリオ',
-    question: '2年間続けてきた習い事やスキル練習ですが、なかなか上達せず費用もかさんできました。どうしますか？',
-    options: [
-      { id: 'A', text: 'まだ諦めたくない。もう少しだけ続ける', scores: { PE: 2, AM: 2, RT: 2 } },
-      { id: 'B', text: '一度立ち止まり、上達しない原因を徹底的に分析してから判断する', scores: { AT: 4, LP: 2, AM: 2 } },
-      { id: 'C', text: '向いていないと認め、きっぱりやめる', scores: { LP: 3, AT: 2, SP: 1 } },
-      { id: 'D', text: '全く別のアプローチで同じ目標を目指す方法を探す', scores: { ID: 3, RT: 2, AM: 3 } },
-    ],
-    measureTypes: ['AT', 'LP', 'PE', 'ID', 'RT'],
-  },
-  {
-    id: 4,
-    section: 'A',
-    sectionLabel: '日常の選択シナリオ',
-    question: 'フリマアプリで自作の商品を出品します。材料費は1,000円、同じような商品は2,000〜4,000円で売られています。いくらで出しますか？',
-    options: [
-      { id: 'A', text: '8,000〜10,000円。こだわりを伝えて高単価を狙う', scores: { RT: 2, ID: 2, AM: 3, AT: 1 } },
-      { id: 'B', text: '3,000〜4,000円。相場に合わせる', scores: { SP: 2, AT: 2 } },
-      { id: 'C', text: '1,500〜2,000円。まず売れることを優先する', scores: { RT: 2, AM: 2, LP: 1 } },
-      { id: 'D', text: '最初は無料か格安で配り、口コミが広がってから値上げする', scores: { ID: 3, RT: 2, AM: 2, AT: 2 } },
-    ],
-    measureTypes: ['RT', 'ID', 'AM', 'AT'],
-  },
-  {
     id: 5,
     section: 'A',
-    sectionLabel: '日常の選択シナリオ',
+    sectionLabel: '思考パターン',
     question: 'グループ作業でリーダーを任されました。メンバーAはとても優秀だが自分勝手、メンバーBは実力は普通だがチームを盛り上げてくれます。どちらを重要な役割に配置しますか？',
     options: [
       { id: 'A', text: 'Aに任せる。実力が最優先だ', scores: { AT: 2, AM: 3, RT: 2 } },
@@ -68,24 +29,9 @@ export const QUESTIONS: Question[] = [
     measureTypes: ['LP', 'AT', 'SI', 'AM'],
   },
   {
-    id: 6,
-    section: 'A',
-    sectionLabel: '日常の選択シナリオ',
-    question: '毎日の時間の使い方について、あなたの考えに一番近いのはどれですか？',
-    options: [
-      { id: 'A', text: '今やっていることより、新しいことにもっと時間を使いたい', scores: { ID: 4, RT: 3, AM: 3 } },
-      { id: 'B', text: '今やっていることを磨きながら、少しずつ新しいことも試す', scores: { AT: 3, PE: 3, AM: 2 } },
-      { id: 'C', text: '仲間や協力者と一緒に、新しい領域へ踏み出したい', scores: { AT: 3, RT: 2, LP: 2 } },
-      { id: 'D', text: '今やっていることをより広い範囲に展開していきたい', scores: { LP: 3, AM: 3, AT: 2, RT: 2 } },
-    ],
-    measureTypes: ['ID', 'RT', 'AM', 'AT', 'LP'],
-  },
-
-  // ─── Section B: お金と時間の選択 ──────────────────────────────────
-  {
     id: 7,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
+    section: 'A',
+    sectionLabel: '思考パターン',
     question: '次の選択肢から、あなたが選ぶとしたらどれですか？',
     options: [
       { id: 'A', text: '確実に30万円もらえる', scores: { SP: 3, RT: -2 } },
@@ -97,8 +43,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 8,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
+    section: 'A',
+    sectionLabel: '思考パターン',
     question: '次の選択肢なら、どれを選びますか？',
     options: [
       { id: 'A', text: '今すぐ10万円', scores: { SP: 3, RT: 1 } },
@@ -109,76 +55,9 @@ export const QUESTIONS: Question[] = [
     measureTypes: ['PE', 'AM', 'AT', 'SP'],
   },
   {
-    id: 9,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
-    question: '急に自由に使える100万円が手に入りました。どう使いますか？',
-    options: [
-      { id: 'A', text: 'すべて貯金・定期預金など安全な方法で保管する', scores: { SP: 5, RT: -3 } },
-      { id: 'B', text: '半分を貯金、半分を投資信託で積み立てる', scores: { SP: 2, RT: 2, AT: 2 } },
-      { id: 'C', text: '全額を株式や投資で積極的に運用する', scores: { RT: 3, AM: 3 } },
-      { id: 'D', text: '自分のスキルアップや将来の事業に全額投資する', scores: { RT: 4, AM: 5, ID: 3, PE: 3 } },
-    ],
-    measureTypes: ['RT', 'SP', 'AM', 'ID'],
-  },
-  {
-    id: 10,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
-    question: 'コインを10回投げて、すべて表が出ました。次の1回で表が出る確率はどのくらいだと思いますか？',
-    options: [
-      { id: 'A', text: 'かなり高い（表が出やすい流れになっている）', scores: { AT: -2 } },
-      { id: 'B', text: '50%（コイン投げは毎回独立しているので変わらない）', scores: { AT: 5 } },
-      { id: 'C', text: 'かなり低い（そろそろ裏が出るはずだ）', scores: { AT: -2 } },
-      { id: 'D', text: '理論上は50%だが、なんとなく答えにくい', scores: { AT: 2 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
-    id: 11,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
-    question: '2年前に20万円で買ったゲーム機やカメラが、最近ほとんど使っていません。売れば5万円になります。維持費（保管・保険等）は月2,000円かかります。どうしますか？',
-    options: [
-      { id: 'A', text: '20万円分使い倒すまで手放さない', scores: { AT: -2, SP: 2 } },
-      { id: 'B', text: '今後の利用頻度とコストを計算して、合理的に判断する', scores: { AT: 5 } },
-      { id: 'C', text: 'とりあえずもう少し様子を見る', scores: { SP: 1 } },
-      { id: 'D', text: '5万円の売却で損した気がするので売りたくない', scores: { RT: -1, AT: -1 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
-    id: 12,
-    section: 'B',
-    sectionLabel: 'お金と時間の選択',
-    question: '「同年代の平均年収は約500万円」という記事を見た直後、あなたの3〜5年後の目標年収は？',
-    options: [
-      { id: 'A', text: '400〜600万円（平均前後でいい）', scores: { SP: 2, AM: 1 } },
-      { id: 'B', text: '600〜900万円（平均より少し上を目指したい）', scores: { AM: 2, AT: 1 } },
-      { id: 'C', text: '900〜1,500万円（しっかり稼ぎたい）', scores: { AM: 3, RT: 2, ID: 2 } },
-      { id: 'D', text: '1,500万円以上（高収入を本気で目指す）', scores: { AM: 5, RT: 3, LP: 2 } },
-    ],
-    measureTypes: ['AM', 'RT', 'LP'],
-  },
-
-  // ─── Section C: あなたの考え方 ────────────────────────────────────
-  {
-    id: 13,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
-    question: '「勉強した人は試験に合格する。田中さんは試験に合格した。では田中さんは勉強したか？」',
-    options: [
-      { id: 'A', text: 'はい、勉強したはずだ', scores: { AT: -2 } },
-      { id: 'B', text: 'いいえ、勉強しなかったかもしれない', scores: { AT: -1 } },
-      { id: 'C', text: '「勉強→合格」は「合格→勉強」を意味しないため、判断できない', scores: { AT: 5 } },
-      { id: 'D', text: '合格したのだから、勉強した可能性が高い', scores: { AT: 1 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
     id: 14,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
+    section: 'A',
+    sectionLabel: '思考パターン',
     question: '「時計」という物を一言で言い換えるとしたら、最もしっくりくるのは？',
     options: [
       { id: 'A', text: '時間を知るための道具', scores: { AT: 0 } },
@@ -189,48 +68,9 @@ export const QUESTIONS: Question[] = [
     measureTypes: ['AT', 'CT', 'ID'],
   },
   {
-    id: 15,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
-    question: '友人が「最近なぜか毎月お金が足りなくなる」と相談してきました。あなたの最初のアドバイスは？',
-    options: [
-      { id: 'A', text: '無駄遣いをやめるよう伝える', scores: { AM: 1 } },
-      { id: 'B', text: 'まず毎月の支出内訳を一緒に確認する', scores: { AT: 2 } },
-      { id: 'C', text: '収入・固定費・変動費・貯蓄に分けて、どこで増減があるか整理する', scores: { AT: 5 } },
-      { id: 'D', text: '節約できるサービスや方法を調べて教える', scores: { AT: 1 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
-    id: 16,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
-    question: '「東京都内のコンビニは何軒あるか？」と聞かれました。どう考えますか？',
-    options: [
-      { id: 'A', text: 'まったく見当もつかない', scores: { AT: 0 } },
-      { id: 'B', text: 'なんとなく数千〜1万くらいかな（感覚で）', scores: { AT: 1 } },
-      { id: 'C', text: '人口・生活圏の密度・競合数などから推定できる', scores: { AT: 4 } },
-      { id: 'D', text: '人口÷来店頻度÷1店舗の処理数で論理的に計算できる', scores: { AT: 5 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
-    id: 17,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
-    question: '「月曜に1回、火曜に2回、水曜に4回、木曜に8回…」金曜は何回になりますか？',
-    options: [
-      { id: 'A', text: '9回', scores: { AT: 0 } },
-      { id: 'B', text: '16回（2倍ずつ増えるパターン）', scores: { AT: 5 } },
-      { id: 'C', text: '10回', scores: { AT: 0 } },
-      { id: 'D', text: 'わからない', scores: { AT: 0 } },
-    ],
-    measureTypes: ['AT'],
-  },
-  {
     id: 18,
-    section: 'C',
-    sectionLabel: 'あなたの考え方',
+    section: 'A',
+    sectionLabel: '思考パターン',
     question: '気に入った服が「20%OFF」セールで買えました。翌週さらに「20%OFF」になっていました。合計で元の価格の何%引きになっていますか？',
     options: [
       { id: 'A', text: '40%引き（20%＋20%で計算）', scores: { AT: -1 } },
@@ -240,12 +80,10 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['AT'],
   },
-
-  // ─── Section D: Big5 性格特性 ─────────────────────────────────────
   {
     id: 19,
-    section: 'D',
-    sectionLabel: '性格特性',
+    section: 'A',
+    sectionLabel: '思考パターン',
     question: '新しい経験・知識・挑戦に対して、最もあなたに当てはまるのは？',
     options: [
       { id: 'A', text: '新しい経験や知識を常に求め、未知の領域に飛び込むことが好き', scores: { ID: 3, CT: 3, RT: 2, AM: 2 } },
@@ -255,23 +93,12 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['ID', 'CT', 'SP', 'RT'],
   },
-  {
-    id: 20,
-    section: 'D',
-    sectionLabel: '性格特性',
-    question: '締め切りや計画の管理について、最もあなたに当てはまるのは？',
-    options: [
-      { id: 'A', text: '綿密な計画を立て、着実に実行する。締め切りは必ず守る', scores: { PE: 4, SP: 2, AM: 2 } },
-      { id: 'B', text: '大まかな方向性を決め、状況に応じて柔軟に対応する', scores: { AT: 2, ID: 2, AM: 2 } },
-      { id: 'C', text: '直感的に動くことが多く、細かい計画は苦手', scores: { ID: 2, CT: 2 } },
-      { id: 'D', text: '重要なことは守るが、細部にはこだわらない', scores: { AM: 2, LP: 1 } },
-    ],
-    measureTypes: ['PE', 'SP', 'ID', 'AM'],
-  },
+
+  // ─── Section B: 性格・行動 ──────────────────────────────────────────
   {
     id: 21,
-    section: 'D',
-    sectionLabel: '性格特性',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: 'エネルギーを最も回復できる方法は？',
     options: [
       { id: 'A', text: '多くの人と話したり交流することでエネルギーが高まる', scores: { SI: 4, LP: 2 } },
@@ -283,8 +110,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 22,
-    section: 'D',
-    sectionLabel: '性格特性',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: 'グループや職場で意見が対立したとき、あなたはどうしますか？',
     options: [
       { id: 'A', text: '自分の意見をしっかり主張し、納得いくまで議論する', scores: { LP: 3, AM: 2 } },
@@ -296,8 +123,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 23,
-    section: 'D',
-    sectionLabel: '性格特性',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: '締め切りや発表など、プレッシャーがかかる場面でのあなたは？',
     options: [
       { id: 'A', text: 'プレッシャーがあるほど燃えて、実力以上を発揮できる', scores: { AM: 3, LP: 2, RT: 2 } },
@@ -309,8 +136,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 24,
-    section: 'D',
-    sectionLabel: '性格特性',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: '10年後の自分として、最もイメージに近い姿は？',
     options: [
       { id: 'A', text: '自分の会社やプロジェクトをリードし、大きな組織を動かしている', scores: { LP: 4, AM: 4, RT: 3, ID: 3 } },
@@ -320,51 +147,10 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['LP', 'AM', 'PE', 'SP', 'ID'],
   },
-
-  // ─── Section E: 行動履歴・キャリア志向 ────────────────────────────
-  {
-    id: 25,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
-    question: '読書・学習・スキルアップに使う時間は週平均でどのくらいですか？',
-    options: [
-      { id: 'A', text: 'ほぼゼロ（1時間未満）', scores: { PE: 0, AM: 0 } },
-      { id: 'B', text: '1〜3時間程度', scores: { PE: 1, AM: 1 } },
-      { id: 'C', text: '3〜10時間程度', scores: { PE: 3, AM: 3, AT: 2 } },
-      { id: 'D', text: '10時間以上', scores: { PE: 5, AM: 5, AT: 3, ID: 2 } },
-    ],
-    measureTypes: ['PE', 'AM', 'AT'],
-  },
-  {
-    id: 26,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
-    question: '過去3年間で「少し怖い・難しい」と感じた挑戦をどれくらいしましたか？',
-    options: [
-      { id: 'A', text: 'ほぼしていない（1〜2回以下）', scores: { SP: 3, PE: 1 } },
-      { id: 'B', text: '数回（3〜5回）', scores: { RT: 2, AM: 2, PE: 2 } },
-      { id: 'C', text: '定期的に（6〜10回）', scores: { RT: 3, AM: 3, PE: 3, ID: 2 } },
-      { id: 'D', text: '常に挑戦し続けている（10回以上）', scores: { RT: 5, AM: 5, PE: 4, ID: 3 } },
-    ],
-    measureTypes: ['RT', 'AM', 'PE', 'ID'],
-  },
-  {
-    id: 27,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
-    question: '「2年以上継続して取り組んでいること」はいくつありますか？',
-    options: [
-      { id: 'A', text: '特にない', scores: { PE: 0, SP: 1 } },
-      { id: 'B', text: '1つある', scores: { PE: 3, AM: 2 } },
-      { id: 'C', text: '2〜3つある', scores: { PE: 4, AM: 3, SP: 2 } },
-      { id: 'D', text: '4つ以上ある', scores: { PE: 5, AM: 4, AT: 2 } },
-    ],
-    measureTypes: ['PE', 'AM'],
-  },
   {
     id: 28,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: '副業・フリーランス・起業・投資のいずれかの実践経験はありますか？',
     options: [
       { id: 'A', text: 'まったくない', scores: { SP: 2 } },
@@ -376,8 +162,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 29,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
+    section: 'B',
+    sectionLabel: '性格・行動',
     question: 'あなたにとって、仕事やキャリアで最も大切なことは？',
     options: [
       { id: 'A', text: '収入・経済的な自由・資産形成', scores: { AM: 3, RT: 2 } },
@@ -387,38 +173,12 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['AM', 'SP', 'AT', 'LP', 'PE'],
   },
-  {
-    id: 30,
-    section: 'E',
-    sectionLabel: '行動履歴・キャリア志向',
-    question: '仲のいい友人・知人5人は、どんな人たちですか？',
-    options: [
-      { id: 'A', text: '公務員・大企業の社員が多い', scores: { SP: 2 } },
-      { id: 'B', text: 'さまざまな職業・業界の人が混在している', scores: { SI: 3, ID: 2, LP: 2 } },
-      { id: 'C', text: '起業家・フリーランス・専門職が多い', scores: { RT: 3, AM: 3, ID: 3, LP: 2 } },
-      { id: 'D', text: '経営者・高収入・投資家が多い', scores: { RT: 4, AM: 4, LP: 3, AT: 2 } },
-    ],
-    measureTypes: ['SI', 'RT', 'AM', 'LP'],
-  },
 
-  // ─── Section F: 適性・得意分野 ────────────────────────────────────
-  {
-    id: 31,
-    section: 'F',
-    sectionLabel: '適性・得意分野',
-    question: '学校の授業や勉強で、最も得意・好きだったのはどの分野ですか？',
-    options: [
-      { id: 'A', text: '数学・物理・情報技術など理系・論理系の科目', scores: { TA: 3, AT: 2 } },
-      { id: 'B', text: '国語・英語・文学など言語・表現系の科目', scores: { CT: 3, PE: 1 } },
-      { id: 'C', text: '美術・音楽・デザインなど感性・創作系の科目', scores: { CT: 4, ID: 3 } },
-      { id: 'D', text: '社会・歴史・倫理など人文・社会系の科目', scores: { SI: 2, LP: 1, AT: 1 } },
-    ],
-    measureTypes: ['TA', 'CT', 'SI', 'ID'],
-  },
+  // ─── Section C: 適性・志向 ──────────────────────────────────────────
   {
     id: 32,
-    section: 'F',
-    sectionLabel: '適性・得意分野',
+    section: 'C',
+    sectionLabel: '適性・志向',
     question: '給与が同じだとしたら、どんな仕事が一番楽しそうですか？',
     options: [
       { id: 'A', text: '専門技術・医療・エンジニアリングなど、技術で問題を解く仕事', scores: { TA: 4, AT: 1 } },
@@ -430,8 +190,8 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 33,
-    section: 'F',
-    sectionLabel: '適性・得意分野',
+    section: 'C',
+    sectionLabel: '適性・志向',
     question: '周りの人から「自然にそうなってる」「向いてる」とよく言われることに最も近いのは？',
     options: [
       { id: 'A', text: '「技術的なことは任せた」「細かくて正確」「専門的すぎてついていけない」', scores: { TA: 4, PE: 3 } },
@@ -442,22 +202,9 @@ export const QUESTIONS: Question[] = [
     measureTypes: ['TA', 'SI', 'CT', 'AT'],
   },
   {
-    id: 34,
-    section: 'F',
-    sectionLabel: '適性・得意分野',
-    question: '仕事の「理想の成果・手応え」として最もイメージに近いのはどれですか？',
-    options: [
-      { id: 'A', text: '自分が作ったシステム・製品・技術が、実際に動いて使われている', scores: { TA: 4, AT: 2 } },
-      { id: 'B', text: '「あなたのおかげで助かった・良くなった」という言葉を直接もらうこと', scores: { SI: 5, PE: 2 } },
-      { id: 'C', text: '自分の作品・デザイン・コンテンツが広まり、多くの人の目に触れること', scores: { CT: 4, ID: 3 } },
-      { id: 'D', text: '自分が関わったプロジェクト・事業が大きな数字・成果を出したこと', scores: { AM: 4, LP: 2, AT: 1 } },
-    ],
-    measureTypes: ['TA', 'SI', 'CT', 'AM'],
-  },
-  {
     id: 35,
-    section: 'F',
-    sectionLabel: '適性・得意分野',
+    section: 'C',
+    sectionLabel: '適性・志向',
     question: '今後のキャリアで「絶対に向いていない・したくない仕事」に最も近いのはどれですか？',
     options: [
       { id: 'A', text: '高度な技術・専門知識が求められる細かい専門職・技術職', scores: { TA: -3 } },
@@ -467,15 +214,64 @@ export const QUESTIONS: Question[] = [
     ],
     measureTypes: ['TA', 'SI', 'CT', 'SP'],
   },
+  {
+    id: 37,
+    section: 'C',
+    sectionLabel: '適性・志向',
+    question: '休日、気づいたら自然にやっていることに最も近いのはどれですか？',
+    options: [
+      { id: 'A', text: '本・ネット・動画などで気になることを調べたり学んでいる', scores: { AT: 4, ID: 2 } },
+      { id: 'B', text: '友達・家族・恋人と一緒に過ごしたり、誰かと話している', scores: { SI: 5, AM: 1 } },
+      { id: 'C', text: '絵を描く・文章を書く・コードを書くなど一人で何かを作っている', scores: { CT: 4, TA: 2, PE: 2 } },
+      { id: 'D', text: '体を動かす・旅・新しい場所や体験を探している', scores: { RT: 3, PE: 3 } },
+    ],
+    measureTypes: ['AT', 'SI', 'CT', 'TA', 'RT', 'PE'],
+  },
+  {
+    id: 38,
+    section: 'C',
+    sectionLabel: '適性・志向',
+    question: '今すぐ副業を始めるとしたら、どれが一番「やってみたい」と感じますか？',
+    options: [
+      { id: 'A', text: 'プログラミング・技術系のフリーランス案件', scores: { TA: 5, AT: 2 } },
+      { id: 'B', text: 'コーチング・相談・家庭教師などの人と関わる仕事', scores: { SI: 5, PE: 2 } },
+      { id: 'C', text: 'YouTube・ブログ・イラスト・創作などの発信活動', scores: { CT: 5, ID: 2 } },
+      { id: 'D', text: '株・FX・不動産など投資・資産運用の勉強・実践', scores: { RT: 4, AM: 3, AT: 2 } },
+    ],
+    measureTypes: ['TA', 'SI', 'CT', 'RT', 'AM', 'AT'],
+  },
+  {
+    id: 39,
+    section: 'C',
+    sectionLabel: '適性・志向',
+    question: '学生の頃、クラスや学校での自分のポジションに最も近いのはどれですか？',
+    options: [
+      { id: 'A', text: '黙々と自分の作業・勉強に集中していることが多かった', scores: { TA: 3, PE: 3, SP: 2 } },
+      { id: 'B', text: '友達の悩みや相談に乗る「話を聞いてくれる人」だった', scores: { SI: 5, LP: 2 } },
+      { id: 'C', text: '新しいことを企画・提案したり、面白いことを考えていた', scores: { ID: 4, AM: 2, RT: 2 } },
+      { id: 'D', text: '部活・委員会・グループ活動でリーダーになることが多かった', scores: { LP: 5, AM: 2 } },
+    ],
+    measureTypes: ['TA', 'PE', 'SI', 'LP', 'ID', 'AM'],
+  },
+  {
+    id: 40,
+    section: 'C',
+    sectionLabel: '適性・志向',
+    question: '仕事をしていて「これが一番やりがいだ」と感じる瞬間はどれに近いですか？',
+    options: [
+      { id: 'A', text: '複雑な問題をロジカルに分析して解決したとき', scores: { AT: 5, AM: 2 } },
+      { id: 'B', text: '誰かに「ありがとう、助かった」と直接言われたとき', scores: { SI: 4, PE: 3 } },
+      { id: 'C', text: '自分の作品・成果物が形になり、多くの人の目に触れたとき', scores: { CT: 4, ID: 3, PE: 1 } },
+      { id: 'D', text: '目標を大きく超えた数字・成果を叩き出したとき', scores: { AM: 5, RT: 2 } },
+    ],
+    measureTypes: ['AT', 'AM', 'SI', 'CT', 'ID', 'PE', 'RT'],
+  },
 ]
 
 export const TOTAL_QUESTIONS = QUESTIONS.length
 
 export const SECTIONS = [
-  { id: 'A', label: '日常の選択シナリオ', range: [1, 6] },
-  { id: 'B', label: 'お金と時間の選択', range: [7, 12] },
-  { id: 'C', label: 'あなたの考え方', range: [13, 18] },
-  { id: 'D', label: '性格特性', range: [19, 24] },
-  { id: 'E', label: '行動履歴・キャリア志向', range: [25, 30] },
-  { id: 'F', label: '適性・得意分野', range: [31, 35] },
+  { id: 'A', label: '思考パターン', range: [1, 19] },
+  { id: 'B', label: '性格・行動', range: [21, 29] },
+  { id: 'C', label: '適性・志向', range: [32, 40] },
 ]
